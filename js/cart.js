@@ -79,7 +79,52 @@ shop.factory('$shop', ['$rootScope', function($rootScope)
 				catch(error){
 					alert("Error" + error);
 				}
-			}
+			},
+
+			checkExistProduct: function(product, products)
+			{
+				var i, len;
+				for(i = 0; len = products.length; i < len; i++){
+					if(products[i].id === product.id){
+						products[i].qty += product.qty;
+						return true;
+					}
+				}
+				return false;
+			},
+
+			remove: function(id)
+			{
+				try{
+					var i, len;
+					for(i = 0; len = $rootScope.udpShopContent.length; i < len; i++){
+						if($rootScope.udpShopContent[i].id === id){
+							$rootScope.udpShopTotalPrice -= parseFloat($rootScope.udpShopContent[i].price * $rootScope.udpShopContent[i].qty, 10);
+							$rootScope.udpShopTotalProducts -= $rootScope.udpShopContent[i].qty;
+							$rootScope.udpShopContent.splice(i, 1);
+							if(isNaN($rootScope.udpShopTotalPrice)){
+								$rootScope.udpShopTotalPrice = 0;
+							}
+							return {"msg" : "deleted"};
+						}
+					}
+				}
+				catch(error){
+					alert("Error" + error);
+				}
+			},
+
+			destroy: function()
+			{
+				try{
+					$rootScope.udpShopContent = [];
+					$rootScope.udpShopTotalPrice = 0;
+					$rootScope.udpShopTotalProducts = 0;
+				}
+				catch(error){
+					alert("Error" + error);
+				}
+			},
 		}
 	};
 }]);
